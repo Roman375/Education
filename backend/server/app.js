@@ -37,9 +37,3 @@ async function start() {
 }
 
 start()
-
-
-
-// app.listen(PORT, (err) => {
-//   err ? console.log(err) : console.log('Server started!')
-// })
