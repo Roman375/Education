@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,64 +18,60 @@ import MoviesSearch from '../MoviesSearch/MoviesSearch';
 
 import withHocs from './MoviesTableHoc';
 
-class MoviesTable extends React.Component {
-  state = {
+const MoviesTable = ({ classes, data = {}, onOpen }) => {
+  const [state, setState] = useState({
     anchorEl: null,
     openDialog: false,
     name: '',
+  });
+
+  const handleChange = name => (event) => {
+    setState({ ...state, [name]: event.target.value });
   };
 
-  handleChange = name => (event) => {
-    this.setState({ [name]: event.target.value });
-  };
-
-  handleSearch = (e) => {
-    const { data } = this.props;
-    const { name } = this.state;
+  const handleSearch = (e) => {
 
     if(e.charCode === 13) {
       data.fetchMore({
-        variables: { name },
+        variables: { ...state.name },
         updateQuery: (previousResult, { fetchMoreResult }) => fetchMoreResult,
       });
     }
   };
 
-  handleDialogOpen = () => { this.setState({ openDialog: true }); };
-  handleDialogClose = () => { this.setState({ openDialog: false }); };
+  const handleDialogOpen = () => { setState({ ...state, openDialog: true }); };
+  const handleDialogClose = () => {setState({ ...state, openDialog: false }); };
 
-  handleClick = ({ currentTarget }, data) => {
-    this.setState({
+  const handleClick = ({ currentTarget }, data) => {
+    setState({
+      ...state,
       anchorEl: currentTarget,
       data,
     });
   };
 
-  handleClose = () => { this.setState({ anchorEl: null }); };
+  const handleClose = () => { setState({ ...state, anchorEl: null }); };
 
-  handleEdit = () => {
-    this.props.onOpen(this.state.data);
-    this.handleClose();
+  const handleEdit = () => {
+    onOpen(state.data);
+    handleClose();
   };
 
-  handleDelete = () => {
-    this.handleDialogOpen();
-    this.handleClose();
+  const handleDelete = () => {
+    handleDialogOpen();
+    state.openDialog && handleClose();
   };
 
-  render() {
-    const { anchorEl, openDialog, data: activeElem = {}, name } = this.state;
-
-    const { classes, data = {} } = this.props;
+    const { anchorEl, openDialog, data: activeElem = {}, name } = state;
 
     const { movies = [] } = data;
 
     return (
       <>
         <Paper>
-          <MoviesSearch name={name} handleChange={this.handleChange} handleSearch={this.handleSearch} />
+          <MoviesSearch name={name} handleChange={handleChange} handleSearch={handleSearch} />
         </Paper>
-        <MoviesDialog open={openDialog} handleClose={this.handleDialogClose} id={activeElem.id} />
+        <MoviesDialog open={openDialog} handleClose={handleDialogClose} id={activeElem.id} />
         <Paper className={classes.root}>
           <Table>
             <TableHead>
@@ -101,12 +97,12 @@ class MoviesTable extends React.Component {
                     </TableCell>
                     <TableCell align="right">
                       <>
-                        <IconButton color="inherit" onClick={(e) => this.handleClick(e, movie)}>
+                        <IconButton color="inherit" onClick={(e) => handleClick(e, movie)}>
                           <MoreIcon />
                         </IconButton>
-                        <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose} >
-                          <MenuItem onClick={this.handleEdit}><CreateIcon /> Edit</MenuItem>
-                          <MenuItem onClick={this.handleDelete}><DeleteIcon/> Delete</MenuItem>
+                        <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose} >
+                          <MenuItem onClick={handleEdit}><CreateIcon /> Edit</MenuItem>
+                          <MenuItem onClick={handleDelete}><DeleteIcon/> Delete</MenuItem>
                         </Menu>
                       </>
                     </TableCell>
@@ -118,7 +114,6 @@ class MoviesTable extends React.Component {
         </Paper>
       </>
     );
-  }
 };
 
 export default withHocs(MoviesTable);

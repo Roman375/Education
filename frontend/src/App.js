@@ -9,16 +9,14 @@ const client = new ApolloClient({
   uri: 'http://localhost:3005/graphql',
 });
 
-class App extends Component {
-  render() {
-    return (
+const App = () => (
+    <>
       <ApolloProvider client={client}>
         <MuiThemeProvider theme={theme}>
           <Tabs />
         </MuiThemeProvider>
       </ApolloProvider>
+    </>
     );
-  }
-}
 
 export default App;
