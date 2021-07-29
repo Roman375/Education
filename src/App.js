@@ -11,11 +11,7 @@ const client = new ApolloClient({
 
 const App = () => (
     <>
-      <ApolloProvider client={client}>
-        <MuiThemeProvider theme={theme}>
-          <Tabs />
-        </MuiThemeProvider>
-      </ApolloProvider>
+      <div>ChartJS</div>
     </>
     );
 
