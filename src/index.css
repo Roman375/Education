@@ -1,4 +1,6 @@
 body {
+  display: flex;
+  justify-content: center;
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen",
@@ -6,4 +8,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.chartjs-render-monitor{
+  width: 900px;
+  height: 400px;
 }

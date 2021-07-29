@@ -1,18 +1,6 @@
-import React, { Component } from 'react';
-import Tabs from './components/Tabs/Tabs';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import theme from './components/theme';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
+import React from 'react';
+import Chart from './charts/Chart';
 
-const client = new ApolloClient({
-  uri: 'http://localhost:3005/graphql',
-});
-
-const App = () => (
-    <>
-      <div>ChartJS</div>
-    </>
-    );
+const App = () => <Chart />;
 
 export default App;
